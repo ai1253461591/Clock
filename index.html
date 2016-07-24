@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<meta name="author" content="">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<title></title>
+	<style type="text/css">
+		html,body{
+			height: 100%;
+			width: 100%;
+			margin: 0;
+			padding: 0;
+		}		
+	</style>
+</head>
+<body>
+	<canvas id="myCanvas" width="310" height="310" style="border: 1px solid #ccc;">看不到我后，说明你的浏览器不支持！！</canvas>
+	<script type="text/javascript">
+		window.onload = draw;
+		var myCanvas = document.getElementById("myCanvas");
+		var ctx = myCanvas.getContext('2d');
+		function draw(){
+			ctx.save();
+			ctx.translate(150,150);//////改变坐标原点
+			var deg = 2*Math.PI/12;
+			ctx.save();
+			ctx.beginPath();
+			for (var i=0;i<13;i++) {
+				var y = Math.sin(i*deg);
+				var x = -Math.cos(i*deg);
+					ctx.fillStyle = "#fff";
+			ctx.shadowOffsetX = 6;
+			ctx.shadowOffsetY = 6;
+			ctx.shadowBlur = 6;
+			ctx.shadowColor = "gray"
+				ctx.lineTo(y*150,x*150);
+			}
+			var c = ctx.createRadialGradient(0,0,0,0,0,130);
+			c.addColorStop(1,'#fe0');
+			c.addColorStop(0,'#11fae8');
+			ctx.fillStyle = c;
+			ctx.fill();
+			ctx.closePath();
+			ctx.restore();
+			//表盘完
+			//数字
+			ctx.save();
+			ctx.beginPath();
+			for (var i=1;i<13;i++) {
+				var x1 = Math.sin(i*deg);
+				var y1 = -Math.cos(i*deg);
+				ctx.fillStyle = "#fff";
+			ctx.shadowOffsetX = 1;
+			ctx.shadowOffsetY = 1;
+			ctx.shadowBlur = 1;
+			ctx.shadowColor = "gray"
+				ctx.fillStyle = '#fff';
+				ctx.font = "bold 20px Calibri";
+				ctx.textAlign = 'center';
+				ctx.textBaseline = "middle";
+				ctx.fillText(i,x1 * 120,y1 * 120)
+			}
+			ctx.closePath();
+			ctx.restore();
+			
+			//小刻度
+			ctx.save();
+			var deg1 = 2*Math.PI/60;
+			ctx.beginPath();
+			for (var i=0;i<60;i++) {
+				var x3 = Math.sin(i*deg1);
+				var y3 = -Math.cos(i*deg1);
+				ctx.fillStyle = "#fff";
+			ctx.shadowOffsetX = 1;
+			ctx.shadowOffsetY = 1;
+			ctx.shadowBlur = 1;
+			ctx.shadowColor = "gray"
+				ctx.moveTo(x3*145,y3*145);
+				ctx.lineTo(x3*139,y3*139);
+			}
+			ctx.lineWidth = 2;
+			ctx.strokeStyle = "#fff";
+			ctx.closePath();
+			ctx.stroke();
+			ctx.restore();
+			
+			
+			//大刻度
+			ctx.save();
+			ctx.beginPath();
+			for (var i=1;i<13;i++) {
+				var x2 = Math.sin(i*deg);
+				var y2 = -Math.cos(i*deg);
+				ctx.fillStyle = "#fff";
+			ctx.shadowOffsetX = 2;
+			ctx.shadowOffsetY = 2;
+			ctx.shadowBlur = 1;
+			ctx.shadowColor = "gray"
+				ctx.moveTo(x2*147,y2*147);
+				ctx.lineTo(x2*134,y2*134);
+			}
+			ctx.strokeStyle = "#fff";
+			ctx.lineWidth = 4;
+			ctx.closePath();
+			ctx.stroke();
+			ctx.restore();
+			
+			
+			
+			//获取时间
+			var time = new Date(),
+			h =(time.getHours() % 12) * 2 * Math.PI / 12,
+			m = time.getMinutes() * 2 * Math.PI / 60,
+			s = time.getSeconds() * 2 * Math.PI / 60,
+			
+			oH = time.getHours(),
+			oM = time.getMinutes(),
+			oS = time.getSeconds();
+			if (oH<10) {
+				oH = "0"+ oH
+			}
+			if (oM<10) {
+				oM = "0"+ oM
+			}
+			if (oS<10) {
+				oS = "0"+ oS
+			}
+			
+			ctx.save();
+			ctx.beginPath();
+			ctx.fillStyle = "#fff";
+			ctx.shadowOffsetX = 1;
+			ctx.shadowOffsetY = 1;
+			ctx.shadowBlur = 1;
+			ctx.shadowColor = "gray"
+			ctx.rect(20,-15,80,30);
+			ctx.strokeStyle = "yellow";
+			ctx.stroke();
+			ctx.closePath();
+			
+			ctx.beginPath();
+			ctx.font = "normal 20px Calibri";
+			ctx.textBaseline = "middle";
+			ctx.textAlign = "center"
+			ctx.fillStyle = "#ff0";
+			ctx.fillText(oH+":"+oM+":"+oS,60,0)
+			ctx.restore();
+			
+			//时针
+			ctx.save();
+			ctx.rotate(h + m / 12 + s / 720);//h + m / 12 + s / 720
+			ctx.beginPath();
+			ctx.moveTo(0,-85);
+			ctx.lineTo(0,6);
+			ctx.closePath();
+				ctx.fillStyle = "#fff";
+			ctx.shadowOffsetX = 2;
+			ctx.shadowOffsetY = 2;
+			ctx.shadowBlur = 1;
+			ctx.shadowColor = "gray"
+			ctx.lineWidth = 6;
+			ctx.strokeStyle = "#fff";
+			ctx.stroke();
+			ctx.restore();
+			
+			//分针
+			ctx.save();
+			ctx.rotate(m + s / 60);
+			ctx.beginPath();
+			ctx.moveTo(0,-105);
+			ctx.lineTo(0,8);
+			ctx.closePath();
+			ctx.lineWidth = 4;
+				ctx.fillStyle = "#fff";
+			ctx.shadowOffsetX = 3;
+			ctx.shadowOffsetY = 3;
+			ctx.shadowBlur = 1;
+			ctx.shadowColor = "gray"
+			ctx.strokeStyle = "#fff";
+			ctx.stroke();
+			ctx.restore();
+			
+			//秒针
+			ctx.save();
+			ctx.rotate(s);
+			ctx.beginPath();
+			ctx.moveTo(0,-125);
+			ctx.lineTo(0,10);
+			ctx.closePath();
+			ctx.lineWidth = 2;
+				ctx.fillStyle = "#fff";
+			ctx.shadowOffsetX = 4;
+			ctx.shadowOffsetY = 4;
+			ctx.shadowBlur = 1;
+			ctx.shadowColor = "gray"
+			ctx.strokeStyle = "#fff";
+			ctx.stroke();
+			ctx.restore();
+			
+			
+			
+			ctx.restore();
+			
+		};
+		setInterval(draw,1000);
+	</script>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</body>
+</html>
